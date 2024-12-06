@@ -184,10 +184,27 @@ class _homepageState extends State<homepage> {
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.amber),
+                                        onPressed: () {},
+                                        child: const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 80),
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.add_circle),
+                                              SizedBox(width: 10),
+                                              Text('Add Item'),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 20),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.amber),
                                         onPressed: () {
                                           if (memberName.isNotEmpty &&
                                               itemName.isNotEmpty &&
-                                              totalPaid > 0.0) {
+                                              totalPaid >= 0.0) {
                                             setState(() {
                                               expenses.add({
                                                 'memberName': memberName,
@@ -225,12 +242,12 @@ class _homepageState extends State<homepage> {
                                         },
                                         child: const Padding(
                                           padding: EdgeInsets.symmetric(
-                                              horizontal: 100),
+                                              horizontal: 50),
                                           child: Row(
                                             children: [
                                               Icon(Icons.add_circle),
                                               SizedBox(width: 10),
-                                              Text('Add'),
+                                              Text('Add New Member'),
                                             ],
                                           ),
                                         ),
