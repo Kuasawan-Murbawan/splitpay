@@ -15,9 +15,15 @@ class _homepageState extends State<homepage> {
   String itemName = '';
   double totalPaid = 0.0;
 
+  List itemNames = [];
+  List totalPaids = [];
+
   TextEditingController memberNameController = TextEditingController();
   TextEditingController itemNameController = TextEditingController();
   TextEditingController totalPaidController = TextEditingController();
+
+  final List<TextEditingController> _itemNameController = [];
+  final List<TextEditingController> _totalPaidController = [];
 
   // Function to clear data
   void clearData() {
@@ -32,6 +38,73 @@ class _homepageState extends State<homepage> {
       context,
       MaterialPageRoute(builder: (context) => ResultsPage(expenses: expenses)),
     );
+  }
+
+  // List to store dynamically added rows
+  List<Widget> rows = [];
+
+  @override
+  void dispose() {
+    // Dispose controllers when the widget is disposed
+    memberNameController.dispose();
+    itemNameController.dispose();
+    totalPaidController.dispose();
+    super.dispose();
+  }
+
+  void addRow() {
+    setState(() {
+      // Create new controllers for the new row
+      final newItemController = TextEditingController();
+      final newTotalPaidController = TextEditingController();
+
+      // Add the newly created controller to the controller list
+      _itemNameController.add(newItemController);
+      _totalPaidController.add(newTotalPaidController);
+
+      rows.add(
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    controller: newItemController,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'Enter item\'s name',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    controller: newTotalPaidController,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: 'RM ',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   @override
@@ -116,6 +189,7 @@ class _homepageState extends State<homepage> {
                                     ),
                                   ),
                                   const SizedBox(height: 16),
+                                  // Static Row
                                   Row(
                                     children: [
                                       Expanded(
@@ -134,6 +208,7 @@ class _homepageState extends State<homepage> {
                                               onChanged: (value) {
                                                 setState(() {
                                                   itemName = value;
+                                                  itemNames.add(value);
                                                 });
                                               },
                                               decoration: const InputDecoration(
@@ -178,13 +253,17 @@ class _homepageState extends State<homepage> {
                                     ],
                                   ),
                                   const SizedBox(height: 16),
+                                  // Dynamic Row
+                                  Column(
+                                    children: rows,
+                                  ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.amber),
-                                        onPressed: () {},
+                                        onPressed: addRow,
                                         child: const Padding(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 80),
@@ -202,6 +281,7 @@ class _homepageState extends State<homepage> {
                                         style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.amber),
                                         onPressed: () {
+                                          // need to loop to check for every itemName & totalPaid
                                           if (memberName.isNotEmpty &&
                                               itemName.isNotEmpty &&
                                               totalPaid >= 0.0) {
@@ -209,9 +289,16 @@ class _homepageState extends State<homepage> {
                                               expenses.add({
                                                 'memberName': memberName,
                                                 'itemName': itemName,
+                                                'itemNames': itemNames,
                                                 'totalPaid': totalPaid,
+                                                'totalPaids': totalPaids,
                                               });
                                             });
+
+// need to see where is the values of items
+
+                                            print(
+                                                "COntroller Item: $_itemNameController");
 
                                             // Clear the input fields
                                             memberNameController.clear();
@@ -314,10 +401,18 @@ class _homepageState extends State<homepage> {
                               child: Text('${expense['memberName']}'),
                             ),
                             Expanded(
+                              // Currently, the itemName is static
+                              // the way he assign is by hardcode it
+                              // so need to make it dynamic by turning the itemName into a list
+                              // so the structure should be name, list of items, list of total paid
+                              // then we can loop through the list to display the items
+
                               child: Text('${expense['itemName']}'),
+                              // loop through the list of itemNames
                             ),
                             Expanded(
                               child: Text('RM ${expense['totalPaid']}'),
+                              // loop through the list of totalPaids
                             ),
                             IconButton(
                               icon: Icon(
@@ -342,7 +437,7 @@ class _homepageState extends State<homepage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Total Members: $totalMembers\nTotal Amount Paid: \RM ${totalAmountPaid.toStringAsFixed(2)}\n Pay/person: \RM ${totalAmountPaid / totalMembers}',
+                      'Total Members: $totalMembers\nTotal Amount Paid: \RM ${totalAmountPaid.toStringAsFixed(2)}\n Pay/person: \RM ${(totalAmountPaid / totalMembers).toStringAsFixed(2)}',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
