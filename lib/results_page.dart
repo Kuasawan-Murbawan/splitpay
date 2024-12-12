@@ -7,34 +7,62 @@ class ResultsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate total amount paid overall
+    // Calculate the average amount paid by each person
     double totalPaidOverall = 0;
     for (var expense in expenses) {
       totalPaidOverall += expense['totalPaid'];
     }
 
-    // Calculate average amount paid per person
     double averageAmount = totalPaidOverall / expenses.length;
 
-    // Determine who owes money to whom and how much
-    Set<String> paymentSet = Set<String>();
-    for (var expense in expenses) {
-      String debtor = expense['memberName'];
-      double amountPaid = expense['totalPaid'];
-      double difference = amountPaid - averageAmount;
-      if (difference < 0) {
-        List<String> creditors = [];
-        for (var otherExpense in expenses) {
-          if (otherExpense['totalPaid'] > averageAmount) {
-            creditors.add(otherExpense['memberName']);
-          }
-        }
-        if (creditors.isNotEmpty) {
-          double amountPerCreditor = difference.abs() / creditors.length;
-          for (var creditor in creditors) {
-            paymentSet.add(
-                '$debtor needs to pay RM ${amountPerCreditor.toStringAsFixed(2)} to $creditor');
-          }
+    Set<String> paymentSet = {};
+    Map<String, double> bayarLebih = {};
+    Map<String, double> bayarKurang = {};
+
+    for (var person in expenses) {
+      String name = person['memberName'];
+      double difference = person['totalPaid'] - averageAmount;
+      (difference > 0 ? bayarLebih : bayarKurang)[name] = difference;
+    }
+
+    bayarLebih = Map.fromEntries(bayarLebih.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value)));
+    bayarKurang = Map.fromEntries(bayarKurang.entries.toList()
+      ..sort((a, b) => a.value.compareTo(b.value)));
+
+    // Calculate payments
+    for (var lebihEntry in bayarLebih.entries.toList()) {
+      String lebihName = lebihEntry.key;
+      double lebihAmount = lebihEntry.value;
+
+      for (var kurangEntry in bayarKurang.entries.toList()) {
+        String kurangName = kurangEntry.key;
+        double kurangAmount = kurangEntry.value;
+
+        double baki = lebihAmount + kurangAmount;
+
+        if (baki > 0) {
+          paymentSet.add(
+              "$kurangName need to pay ${kurangAmount.abs().toStringAsFixed(2)} to $lebihName"); // the bayarKurang settle bayar hutang
+          // the bayarLebih still ada lebih, so we need to update the lebihAmount
+          lebihAmount = baki;
+          // the bayarKurang sudah settle hutang, so we remove it from the list
+          bayarKurang.remove(kurangName);
+        } else if (baki < 0) {
+          paymentSet.add(
+              "$kurangName need to pay ${lebihAmount.toStringAsFixed(2)}  to $lebihName"); // the bayarLebih settle kutip hutang
+          // the bayarKurang still have hutang, so we need to update the bayarKurang
+          bayarKurang[kurangName] = baki;
+          // the bayarLebih sudah settle kutip hutang, so we remove it from the list
+          bayarLebih.remove(lebihName);
+          break;
+        } else {
+          paymentSet.add(
+              "$kurangName need to pay ${lebihAmount.toStringAsFixed(2)} to $lebihName"); // the bayarLebih settle kutip hutang
+          // both bayarLebih and bayarKurang already settle hutang, so we remove both from the list
+          bayarLebih.remove(lebihName);
+          bayarKurang.remove(kurangName);
+          break;
         }
       }
     }
