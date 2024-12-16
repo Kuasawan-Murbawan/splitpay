@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ResultsPage extends StatelessWidget {
   final List<Map<String, dynamic>> expenses;
 
-  ResultsPage({required this.expenses});
+  const ResultsPage({required this.expenses});
 
   @override
   Widget build(BuildContext context) {
@@ -95,21 +95,19 @@ class ResultsPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Payments Breakdown',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Payments Breakdown',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                 ),
                 const Card(
@@ -144,10 +142,10 @@ class ResultsPage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Table(
-                      columnWidths: {
-                        0: const FlexColumnWidth(3),
-                        1: const FlexColumnWidth(2),
-                        2: const FlexColumnWidth(2),
+                      columnWidths: const {
+                        0: FlexColumnWidth(3),
+                        1: FlexColumnWidth(2),
+                        2: FlexColumnWidth(2),
                       },
                       defaultVerticalAlignment:
                           TableCellVerticalAlignment.middle,

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'results_page.dart'; // Import the results page
 
-class homepage extends StatefulWidget {
-  const homepage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<homepage> createState() => _homepageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _homepageState extends State<homepage> {
+class _HomePageState extends State<HomePage> {
   List<Map<String, dynamic>> expenses = [];
 
   String memberName = '';
@@ -155,202 +155,193 @@ class _homepageState extends State<homepage> {
                   colors: [Colors.blue, Colors.green], // Choose your colors
                 ),
               ),
-              child: Column(
-                children: [
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(children: [
                   Center(
-                    child: Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Card(
-                            elevation: 4,
-                            margin: const EdgeInsets.all(16),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Member\'s Name:',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Card(
+                          elevation: 4,
+                          margin: const EdgeInsets.all(16),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Member\'s Name:',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 8),
+                                TextField(
+                                  controller: memberNameController,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      memberName = value;
+                                    });
+                                  },
+                                  decoration: const InputDecoration(
+                                    hintText: 'Enter member\'s name',
+                                    border: OutlineInputBorder(),
                                   ),
-                                  const SizedBox(height: 8),
-                                  TextField(
-                                    controller: memberNameController,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        memberName = value;
-                                      });
-                                    },
-                                    decoration: const InputDecoration(
-                                      hintText: 'Enter member\'s name',
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  // Static Row
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              'Item Name:',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            TextField(
-                                              controller: itemNameController,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  itemName = value;
-                                                  itemNames.add(value);
-                                                });
-                                              },
-                                              decoration: const InputDecoration(
-                                                hintText: 'Enter item\'s name',
-                                                border: OutlineInputBorder(),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              'Total Paid:',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            TextField(
-                                              controller: totalPaidController,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  totalPaid =
-                                                      double.tryParse(value) ??
-                                                          0.0;
-                                                });
-                                              },
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              decoration: const InputDecoration(
-                                                hintText: 'RM ',
-                                                border: OutlineInputBorder(),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 16),
-                                  // Dynamic Row
-                                  Column(
-                                    children: rows,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.amber),
-                                        onPressed: addRow,
-                                        child: const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 80),
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.add_circle),
-                                              SizedBox(width: 10),
-                                              Text('Add Item'),
-                                            ],
+                                ),
+                                const SizedBox(height: 16),
+                                // Static Row
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'Item Name:',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 20),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.amber),
-                                        onPressed: () {
-                                          // need to loop to check for every itemName & totalPaid
-                                          if (memberName.isNotEmpty &&
-                                              itemName.isNotEmpty &&
-                                              totalPaid >= 0.0) {
-                                            setState(() {
-                                              expenses.add({
-                                                'memberName': memberName,
-                                                'itemName': itemName,
-                                                'itemNames': itemNames,
-                                                'totalPaid': totalPaid,
-                                                'totalPaids': totalPaids,
+                                          const SizedBox(height: 8),
+                                          TextField(
+                                            controller: itemNameController,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                itemName = value;
+                                                itemNames.add(value);
                                               });
-                                            });
-
-// need to see where is the values of items
-
-                                            print(
-                                                "COntroller Item: $_itemNameController");
-
-                                            // Clear the input fields
-                                            memberNameController.clear();
-                                            itemNameController.clear();
-                                            totalPaidController.clear();
-                                          } else {
-                                            // Show a dialog if any controller is empty
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: const Text('Error'),
-                                                  content: const Text(
-                                                      'Please fill in all fields with valid data.'),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: const Text('OK'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          }
-                                        },
-                                        child: const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 50),
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.add_circle),
-                                              SizedBox(width: 10),
-                                              Text('Add New Member'),
-                                            ],
+                                            },
+                                            decoration: const InputDecoration(
+                                              hintText: 'Enter item\'s name',
+                                              border: OutlineInputBorder(),
+                                            ),
                                           ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'Total Paid:',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          TextField(
+                                            controller: totalPaidController,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                totalPaid =
+                                                    double.tryParse(value) ??
+                                                        0.0;
+                                              });
+                                            },
+                                            keyboardType: TextInputType.number,
+                                            decoration: const InputDecoration(
+                                              hintText: 'RM ',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                // Dynamic Row
+                                Column(
+                                  children: rows,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.amber),
+                                      onPressed: () {}, //addRow,
+                                      child: const Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 0),
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.add_circle),
+                                            SizedBox(width: 10),
+                                            Text('Add Item'),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 16),
-                                ],
-                              ),
+                                    ),
+                                    const SizedBox(width: 15),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.amber),
+                                      onPressed: () {
+                                        // need to loop to check for every itemName & totalPaid
+                                        if (memberName.isNotEmpty &&
+                                            itemName.isNotEmpty &&
+                                            totalPaid >= 0.0) {
+                                          setState(() {
+                                            expenses.add({
+                                              'memberName': memberName,
+                                              'itemName': itemName,
+                                              'itemNames': itemNames,
+                                              'totalPaid': totalPaid,
+                                              'totalPaids': totalPaids,
+                                            });
+                                          });
+                                          // Clear the input fields
+                                          memberNameController.clear();
+                                          itemNameController.clear();
+                                          totalPaidController.clear();
+                                        } else {
+                                          // Show a dialog if any controller is empty
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Text('Error'),
+                                                content: const Text(
+                                                    'Please fill in all fields with valid data.'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: const Text('OK'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        }
+                                      },
+                                      child: const Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 0),
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.add_circle),
+                                            SizedBox(width: 0),
+                                            Text('New Member'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ]),
               ),
             ),
             Padding(
@@ -415,7 +406,7 @@ class _homepageState extends State<homepage> {
                               // loop through the list of totalPaids
                             ),
                             IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.delete,
                                 size: 20,
                                 color: Colors.red,
@@ -437,7 +428,7 @@ class _homepageState extends State<homepage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Total Members: $totalMembers\nTotal Amount Paid: \RM ${totalAmountPaid.toStringAsFixed(2)}\n Pay/person: \RM ${(totalAmountPaid / totalMembers).toStringAsFixed(2)}',
+                      'Total Members: $totalMembers\nTotal Amount Paid: RM ${totalAmountPaid.toStringAsFixed(2)}\n Pay/person: RM ${(totalAmountPaid / totalMembers).toStringAsFixed(2)}',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -451,12 +442,10 @@ class _homepageState extends State<homepage> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Container(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-              onPressed: navigateToResults,
-              child: const Text("Calculate"),
-            ),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
+            onPressed: navigateToResults,
+            child: const Text("Calculate"),
           ),
         ),
       ),
